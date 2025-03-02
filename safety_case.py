@@ -1,4 +1,5 @@
 import datetime
+import os
 
 class AISafetyCase:
     def __init__(self, organization_name, website=None):
@@ -9,50 +10,65 @@ class AISafetyCase:
         self.hazards = []
         self.contractor_management = None
         self.global_warming_impacts = []
+        self.filename = f"safety_case_{self.organization_name.replace(' ', '_')}_{datetime.datetime.now().strftime('%Y%m%d')}.txt"
 
     def provide_sms(self):
         """Prompt user to enter SMS details interactively."""
-        self.sms_document = input("Enter a brief summary of your Safety Management System (SMS): ")
+        while not self.sms_document:
+            self.sms_document = input("Enter a brief summary of your Safety Management System (SMS): ").strip()
+            if not self.sms_document:
+                print("⚠️ SMS document is required. Please enter valid information.")
 
     def add_incident(self):
         """Prompt user to enter incident details."""
-        description = input("Describe a past incident: ")
-        date = input("Enter the date (YYYY-MM-DD): ")
-        impact = input("Describe the impact: ")
+        while True:
+            description = input("Describe a past incident: ").strip()
+            date = input("Enter the date (YYYY-MM-DD): ").strip()
+            impact = input("Describe the impact: ").strip()
 
-        # Validate date format
-        try:
-            datetime.datetime.strptime(date, "%Y-%m-%d")
-        except ValueError:
-            print("Invalid date format. Please enter in YYYY-MM-DD format.")
-            return
+            try:
+                datetime.datetime.strptime(date, "%Y-%m-%d")
+            except ValueError:
+                print("⚠️ Invalid date format. Please enter in YYYY-MM-DD format.")
+                continue
 
-        self.incident_history.append({"description": description, "date": date, "impact": impact})
+            self.incident_history.append({"description": description, "date": date, "impact": impact})
+            break  # Exit loop if all inputs are valid
 
     def add_hazard(self):
         """Prompt user to enter hazard details."""
-        hazard_name = input("Enter the name of the hazard: ")
-        potential_risk = input("Describe the potential risk: ")
-        existing_control = input("What control measures are in place?: ")
+        while True:
+            hazard_name = input("Enter the name of the hazard: ").strip()
+            potential_risk = input("Describe the potential risk: ").strip()
+            existing_control = input("What control measures are in place?: ").strip()
 
-        self.hazards.append({"hazard": hazard_name, "risk": potential_risk, "control": existing_control})
+            if hazard_name and potential_risk and existing_control:
+                self.hazards.append({"hazard": hazard_name, "risk": potential_risk, "control": existing_control})
+                break  # Exit loop if all inputs are valid
+            else:
+                print("⚠️ All fields are required. Please enter complete details.")
 
     def set_contractor_management(self):
         """Prompt user to describe contractor safety policy."""
-        self.contractor_management = input("Describe your contractor safety policies: ")
+        while not self.contractor_management:
+            self.contractor_management = input("Describe your contractor safety policies: ").strip()
+            if not self.contractor_management:
+                print("⚠️ Contractor management policy is required.")
 
     def add_global_warming_factor(self):
         """Prompt user to enter climate-related risks."""
-        factor = input("Enter a climate-related risk (e.g., extreme heat, flooding): ")
-        impact = input("Describe its impact on operations: ")
+        while True:
+            factor = input("Enter a climate-related risk (e.g., extreme heat, flooding): ").strip()
+            impact = input("Describe its impact on operations: ").strip()
 
-        self.global_warming_impacts.append({"factor": factor, "impact": impact})
+            if factor and impact:
+                self.global_warming_impacts.append({"factor": factor, "impact": impact})
+                break  # Exit loop if all inputs are valid
+            else:
+                print("⚠️ Both fields are required. Please enter complete details.")
 
     def generate_safety_case(self):
         """Compile and return the safety case report."""
-        if not self.sms_document:
-            return "Error: SMS document required for analysis."
-
         safety_case = f"Safety Case for {self.organization_name}\n\n"
         safety_case += "1. Organization Overview:\n" + (self.website if self.website else "No website provided") + "\n\n"
         safety_case += "2. Safety Management System (SMS) Overview:\n" + str(self.sms_document) + "\n\n"
@@ -90,18 +106,18 @@ class AISafetyCase:
 
         return safety_case
 
-    def save_to_file(self, filename="safety_case_report.txt"):
+    def save_to_file(self):
         """Save the generated safety case to a text file."""
         report = self.generate_safety_case()
-        with open(filename, "w") as file:
+        with open(self.filename, "w") as file:
             file.write(report)
-        print(f"\n✅ Safety case saved as {filename}")
+        print(f"\n✅ Safety case saved as {self.filename}")
 
 
 # Example Usage
 if __name__ == "__main__":
-    company_name = input("Enter your company name: ")
-    website = input("Enter your company website (or leave blank if none): ")
+    company_name = input("Enter your company name: ").strip()
+    website = input("Enter your company website (or leave blank if none): ").strip()
 
     organization = AISafetyCase(company_name, website)
 
@@ -119,7 +135,7 @@ if __name__ == "__main__":
         add_more_hazards = input("Would you like to add another hazard? (yes/no): ").strip().lower() == "yes"
 
     organization.set_contractor_management()
-    
+
     add_more_global_warming = True
     while add_more_global_warming:
         organization.add_global_warming_factor()
