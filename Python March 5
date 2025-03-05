@@ -1,0 +1,136 @@
+import datetime
+import re
+
+class AISafetyCase:
+    """
+    AI-Powered Safety Case Generator
+    --------------------------------
+    This Python script helps organizations generate a structured safety case
+    by entering key safety details.
+    
+    📌 HOW TO USE:
+    1. Replace the example data below with your organization's actual details.
+    2. Copy and paste this script into a Python environment (ChatGPT, Google Colab, or local Python).
+    3. Run the script to generate a customized safety case report.
+    """
+
+    def __init__(self):
+        """Initialize with empty fields for the organization to fill out."""
+        # 🏢 ORGANIZATION DETAILS (ENTER YOUR DATA BELOW)
+        self.organization_name = "Your Organization Name"  
+        self.website = "https://yourcompanywebsite.com"
+        self.sms_document = "Briefly describe your Safety Management System (SMS)."
+
+        # ⚠️ INCIDENT HISTORY (ADD INCIDENTS BELOW)
+        self.incident_history = [
+            {"description": "Example Incident: Chemical spill in warehouse", "date": "2023-01-10", "impact": "No injuries but required cleanup"}
+        ]
+
+        # 🔥 IDENTIFIED HAZARDS (LIST HAZARDS & CONTROLS BELOW)
+        self.hazards = [
+            {"hazard": "Working at heights", "risk": "Fall injuries", "control": "Harness, guardrails, training"}
+        ]
+
+        # 🛠️ CONTRACTOR MANAGEMENT (DESCRIBE POLICY)
+        self.contractor_management = "Example: Contractors must complete site-specific safety training before work."
+
+        # 🌍 GLOBAL WARMING IMPACTS (LIST CLIMATE RISKS)
+        self.global_warming_impacts = [
+            {"factor": "Extreme heat", "impact": "Heat stress risk for outdoor workers"}
+        ]
+
+        # 🚨 MANAGEMENT OMISSIONS (LIST MISSING SAFETY CONTROLS)
+        self.management_omissions = [
+            "Example: No emergency exits mapped for high-traffic areas."
+        ]
+
+        # 📜 RELEVANT REGULATIONS & DUTIES (LIST COMPLIANCE REQUIREMENTS)
+        self.relevant_regulations = [
+            "Example: OSHA 1910.132 - Personal Protective Equipment requirements."
+        ]
+
+        # 📄 GENERATE SAFE FILENAME
+        sanitized_name = re.sub(r'\W+', '_', self.organization_name)
+        self.filename = f"safety_case_{sanitized_name}_{datetime.datetime.now().strftime('%Y%m%d')}.txt"
+
+    def generate_safety_case(self):
+        """Compile and return the safety case report."""
+        safety_case = f"📝 SAFETY CASE FOR: {self.organization_name}\n\n"
+        safety_case += f"📌 Organization Website: {self.website}\n\n"
+        safety_case += f"📜 Safety Management System (SMS) Overview:\n{self.sms_document}\n\n"
+
+        # INCIDENT HISTORY
+        safety_case += "⚠️ Past Incident Analysis:\n"
+        if self.incident_history:
+            for incident in self.incident_history:
+                safety_case += f" - {incident['date']}: {incident['description']} (Impact: {incident['impact']})\n"
+        else:
+            safety_case += " - No past incidents recorded.\n"
+        safety_case += "\n"
+
+        # HAZARDS & CONTROLS
+        safety_case += "🔥 Identified Hazards and Controls:\n"
+        if self.hazards:
+            for hazard in self.hazards:
+                safety_case += f" - {hazard['hazard']}: {hazard['risk']} (Control: {hazard['control']})\n"
+        else:
+            safety_case += " - No hazards documented.\n"
+        safety_case += "\n"
+
+        # CONTRACTOR MANAGEMENT
+        safety_case += f"🛠️ Contractor Management Approach:\n{self.contractor_management}\n\n"
+
+        # GLOBAL WARMING IMPACTS
+        safety_case += "🌍 Global Warming Considerations:\n"
+        if self.global_warming_impacts:
+            for impact in self.global_warming_impacts:
+                safety_case += f" - {impact['factor']}: {impact['impact']}\n"
+        else:
+            safety_case += " - No climate-related hazard impacts documented.\n"
+        safety_case += "\n"
+
+        # MANAGEMENT OMISSIONS
+        safety_case += "🚨 Management Omissions (Missed Safety Controls):\n"
+        if self.management_omissions:
+            for omission in self.management_omissions:
+                safety_case += f" - {omission}\n"
+        else:
+            safety_case += " - No omissions identified.\n"
+        safety_case += "\n"
+
+        # RELEVANT REGULATIONS
+        safety_case += "📜 Relevant Regulations & Legal Duties:\n"
+        if self.relevant_regulations:
+            for regulation in self.relevant_regulations:
+                safety_case += f" - {regulation}\n"
+        else:
+            safety_case += " - No regulations listed.\n"
+        safety_case += "\n"
+
+        # AI RECOMMENDATIONS
+        safety_case += "🤖 AI Recommendations:\n"
+        safety_case += "- Review hazard control measures for improvements.\n"
+        safety_case += "- Consider additional contractor risk management strategies.\n"
+        safety_case += "- Monitor extreme weather risks as part of future safety planning.\n"
+
+        return safety_case
+
+    def save_to_file(self):
+        """Save the generated safety case to a text file."""
+        report = self.generate_safety_case()
+        with open(self.filename, "w") as file:
+            file.write(report)
+        print(f"\n✅ Safety case saved as {self.filename}")
+
+
+# 🚀 **HOW TO RUN THIS SCRIPT**
+if __name__ == "__main__":
+    # 🏢 Replace with your organization's details before running
+    organization = AISafetyCase()
+    
+    # ✅ Generate and Print the Safety Case Report
+    print("\n📄 Generating Safety Case Report...\n")
+    print(organization.generate_safety_case())
+
+    # 💾 Save the Safety Case Report to File
+    organization.save_to_file()
