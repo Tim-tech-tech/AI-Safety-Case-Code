@@ -1,0 +1,141 @@
+HOW TO USE:
+1. Store your PDF, Image, or Word file in the same folder as this script.
+2. Enter the filenames below where indicated.
+3. Run the script to generate a structured safety case report.
+"""
+
+def __init__(self):
+    """Initialize with placeholders for organization details and uploaded files."""
+
+    # 🏢 ORGANIZATION DETAILS (REPLACE WITH REAL DATA)
+    self.organization_name = "Your Company Name"
+    self.website = "https://yourcompanywebsite.com"
+
+    # 📄 FILE INPUTS (UPDATE WITH YOUR FILE NAMES)
+    self.pdf_file = "safety_report.pdf"  # Example: Change to actual PDF filename
+    self.image_file = "safety_poster.jpg"  # Example: Change to actual image filename
+    self.word_file = "safety_policy.docx"  # Example: Change to actual Word filename
+
+    # 📜 SAFETY MANAGEMENT SYSTEM (SMS)
+    self.sms_document = self.extract_text_from_pdf(self.pdf_file)
+
+    # ⚠️ INCIDENT HISTORY (EXTRACTED FROM IMAGE)
+    self.incident_history = [self.extract_text_from_image(self.image_file)]
+
+    # 🔥 IDENTIFIED HAZARDS (EXTRACTED FROM WORD DOC)
+    self.hazards = [{"hazard": h, "risk": "Unknown", "control": "Unknown"} for h in self.extract_text_from_word(self.word_file).split("\n") if h]
+
+    # 🛠️ CONTRACTOR MANAGEMENT
+    self.contractor_management = "Example: Contractors must follow safety training before work."
+
+    # 🌍 GLOBAL WARMING IMPACTS
+    self.global_warming_impacts = [
+        {"factor": "Extreme heat", "impact": "Heat stress risk for outdoor workers"}
+    ]
+
+    # 🚨 MANAGEMENT OMISSIONS
+    self.management_omissions = ["Example: Lack of emergency exit drills."]
+
+    # 📜 RELEVANT REGULATIONS & DUTIES
+    self.relevant_regulations = ["Example: OSHA 1910.132 - PPE requirements."]
+
+    # 📄 GENERATE SAFE FILENAME
+    sanitized_name = re.sub(r'\W+', '_', self.organization_name)
+    self.filename = f"safety_case_{sanitized_name}_{datetime.datetime.now().strftime('%Y%m%d')}.txt"
+
+def extract_text_from_pdf(self, pdf_file):
+    """Extracts text from a given PDF file."""
+    try:
+        with open(pdf_file, "rb") as file:
+            reader = PyPDF2.PdfReader(file)
+            text = "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
+        return text if text else "⚠️ No readable text found in PDF."
+    except Exception as e:
+        return f"⚠️ Error reading PDF: {e}"
+
+def extract_text_from_image(self, image_file):
+    """Extracts text from an image using OCR."""
+    try:
+        image = Image.open(image_file)
+        text = pytesseract.image_to_string(image)
+        return text if text.strip() else "⚠️ No readable text found in image."
+    except Exception as e:
+        return f"⚠️ Error reading image: {e}"
+
+def extract_text_from_word(self, docx_file):
+    """Extracts text from a .docx Word file."""
+    try:
+        doc = docx.Document(docx_file)
+        text = "\n".join([para.text for para in doc.paragraphs])
+        return text if text.strip() else "⚠️ No readable text found in Word document."
+    except Exception as e:
+        return f"⚠️ Error reading Word file: {e}"
+
+def generate_safety_case(self):
+    """Compile and return the safety case report."""
+    safety_case = f"📝 SAFETY CASE FOR: {self.organization_name}\n\n"
+    safety_case += f"📌 Organization Website: {self.website}\n\n"
+    safety_case += f"📜 Safety Management System (SMS) Overview:\n{self.sms_document}\n\n"
+
+    # INCIDENT HISTORY
+    safety_case += "⚠️ Past Incident Analysis (Extracted from Image):\n"
+    if self.incident_history:
+        for incident in self.incident_history:
+            safety_case += f" - {incident}\n"
+    else:
+        safety_case += " - No past incidents recorded.\n"
+    safety_case += "\n"
+
+    # HAZARDS & CONTROLS
+    safety_case += "🔥 Identified Hazards (Extracted from Word Document):\n"
+    if self.hazards:
+        for hazard in self.hazards:
+            safety_case += f" - {hazard['hazard']}: {hazard['risk']} (Control: {hazard['control']})\n"
+    else:
+        safety_case += " - No hazards documented.\n"
+    safety_case += "\n"
+
+    # CONTRACTOR MANAGEMENT
+    safety_case += f"🛠️ Contractor Management Approach:\n{self.contractor_management}\n\n"
+
+    # GLOBAL WARMING IMPACTS
+    safety_case += "🌍 Global Warming Considerations:\n"
+    if self.global_warming_impacts:
+        for impact in self.global_warming_impacts:
+            safety_case += f" - {impact['factor']}: {impact['impact']}\n"
+    else:
+        safety_case += " - No climate-related hazard impacts documented.\n"
+    safety_case += "\n"
+
+    # MANAGEMENT OMISSIONS
+    safety_case += "🚨 Management Omissions (Missed Safety Controls):\n"
+    if self.management_omissions:
+        for omission in self.management_omissions:
+            safety_case += f" - {omission}\n"
+    else:
+        safety_case += " - No omissions identified.\n"
+    safety_case += "\n"
+
+    # RELEVANT REGULATIONS
+    safety_case += "📜 Relevant Regulations & Legal Duties:\n"
+    if self.relevant_regulations:
+        for regulation in self.relevant_regulations:
+            safety_case += f" - {regulation}\n"
+    else:
+        safety_case += " - No regulations listed.\n"
+    safety_case += "\n"
+
+    # AI RECOMMENDATIONS
+    safety_case += "🤖 AI Recommendations:\n"
+    safety_case += "- Review hazard control measures for improvements.\n"
+    safety_case += "- Consider additional contractor risk management strategies.\n"
+    safety_case += "- Monitor extreme weather risks as part of future safety planning.\n"
+
+    return safety_case
+
+def save_to_file(self):
+    """Save the generated safety case to a text file."""
+    report = self.generate_safety_case()
+    with open(self.filename, "w") as file:
+        file.write(report)
+    print(f"\n✅ Safety case saved as {self.filename}")
